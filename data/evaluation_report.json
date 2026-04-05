@@ -1,0 +1,173 @@
+{
+  "safety_score_model": {
+    "default": {
+      "mae": 2.463776359835066,
+      "rmse": 3.0774158761758477,
+      "feature_importance_ranking": [
+        {
+          "feature": "dead_end_penalty",
+          "importance": 0.3820941150188446
+        },
+        {
+          "feature": "activity_score",
+          "importance": 0.2564208507537842
+        },
+        {
+          "feature": "industrial_penalty",
+          "importance": 0.1451786458492279
+        },
+        {
+          "feature": "lighting_proxy",
+          "importance": 0.06867241114377975
+        },
+        {
+          "feature": "transit_proximity",
+          "importance": 0.0585402213037014
+        },
+        {
+          "feature": "main_road_proximity",
+          "importance": 0.058373816311359406
+        },
+        {
+          "feature": "connectivity_score",
+          "importance": 0.03071989119052887
+        }
+      ]
+    },
+    "evening": {
+      "mae": 2.4176551477645662,
+      "rmse": 3.0331589325300157,
+      "feature_importance_ranking": [
+        {
+          "feature": "dead_end_penalty",
+          "importance": 0.3564646542072296
+        },
+        {
+          "feature": "activity_score",
+          "importance": 0.3001469075679779
+        },
+        {
+          "feature": "industrial_penalty",
+          "importance": 0.12092653661966324
+        },
+        {
+          "feature": "transit_proximity",
+          "importance": 0.07583203166723251
+        },
+        {
+          "feature": "lighting_proxy",
+          "importance": 0.06521791219711304
+        },
+        {
+          "feature": "main_road_proximity",
+          "importance": 0.059090450406074524
+        },
+        {
+          "feature": "connectivity_score",
+          "importance": 0.022321444004774094
+        }
+      ]
+    },
+    "night": {
+      "mae": 2.3880751077978477,
+      "rmse": 3.005175959254276,
+      "feature_importance_ranking": [
+        {
+          "feature": "dead_end_penalty",
+          "importance": 0.4327562749385834
+        },
+        {
+          "feature": "activity_score",
+          "importance": 0.16231630742549896
+        },
+        {
+          "feature": "industrial_penalty",
+          "importance": 0.14603546261787415
+        },
+        {
+          "feature": "lighting_proxy",
+          "importance": 0.13252408802509308
+        },
+        {
+          "feature": "main_road_proximity",
+          "importance": 0.05919371172785759
+        },
+        {
+          "feature": "transit_proximity",
+          "importance": 0.04678955674171448
+        },
+        {
+          "feature": "connectivity_score",
+          "importance": 0.020384598523378372
+        }
+      ]
+    }
+  },
+  "route_comparison": {
+    "mean_safety_score": {
+      "fastest": 69.13253786442203,
+      "balanced": 70.46527513865512,
+      "safest": 69.90694659279892,
+      "agent_route": 51.16569687042836
+    },
+    "mean_eta_seconds": {
+      "fastest": 479.236259,
+      "balanced": 657.98019648,
+      "safest": 787.9108076800002,
+      "agent_route": 3465.803641999999
+    },
+    "safety_gain_pct": 1.1201798057748154,
+    "eta_penalty_pct": 64.40968163053792,
+    "summary_text": "Safest route improved mean safety by 1.12% with only 64.41% ETA increase"
+  },
+  "archetype_classifier": {
+    "Vulnerable Solo": {
+      "precision": 0.5675675675675675,
+      "recall": 0.2,
+      "f1-score": 0.29577464788732394,
+      "support": 105.0
+    },
+    "Comfort Seeker": {
+      "precision": 0.5601503759398496,
+      "recall": 0.5775193798449613,
+      "f1-score": 0.5687022900763359,
+      "support": 258.0
+    },
+    "Efficiency First": {
+      "precision": 0.649895178197065,
+      "recall": 0.7969151670951157,
+      "f1-score": 0.7159353348729792,
+      "support": 389.0
+    },
+    "Adaptive": {
+      "precision": 0.5409090909090909,
+      "recall": 0.4798387096774194,
+      "f1-score": 0.5085470085470085,
+      "support": 248.0
+    },
+    "accuracy": 0.599,
+    "macro avg": {
+      "precision": 0.5796305531533933,
+      "recall": 0.5135683141543741,
+      "f1-score": 0.5222398203459119,
+      "support": 1000.0
+    },
+    "weighted avg": {
+      "precision": 0.5910680704511887,
+      "recall": 0.599,
+      "f1-score": 0.5824000322531107,
+      "support": 1000.0
+    }
+  },
+  "ablation_study": {
+    "without_activity_score": -12.745426748243595,
+    "without_connectivity_score": -5.614467997588733,
+    "without_time_aware_scoring": -6.66352499703477,
+    "full_model_mean_safety": 76.57020002697129
+  },
+  "route_computation_latency": {
+    "mean_ms": 413.76156325998636,
+    "p95_ms": 730.3289133499675,
+    "p99_ms": 989.4083430101039
+  }
+}

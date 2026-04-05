@@ -1,0 +1,546 @@
+{
+  "Vulnerable Solo": {
+    "algorithm": "ppo",
+    "agent_path": "/teamspace/studios/this_studio/bigcode/nightsafe/data/processed/agent_vulnerable_solo.zip",
+    "fps": 827.1752018963145,
+    "mean_episode_reward": 53.008770760000004,
+    "mean_safety_score": 45.22392073771637,
+    "mean_travel_time": 3608.42648986,
+    "snapshots": [
+      {
+        "timesteps": 5000.0,
+        "mean_episode_reward": 29.39697276190476,
+        "mean_safety_score": 50.59604627967604,
+        "mean_travel_time": 4423.958337047619
+      },
+      {
+        "timesteps": 10000.0,
+        "mean_episode_reward": 30.179344977272727,
+        "mean_safety_score": 50.698194823617705,
+        "mean_travel_time": 4034.2607208181817
+      },
+      {
+        "timesteps": 15000.0,
+        "mean_episode_reward": 32.02432553731343,
+        "mean_safety_score": 47.94039237107247,
+        "mean_travel_time": 3727.5458690746273
+      },
+      {
+        "timesteps": 20000.0,
+        "mean_episode_reward": 36.57198459090909,
+        "mean_safety_score": 47.9445175060274,
+        "mean_travel_time": 3886.2744001363635
+      },
+      {
+        "timesteps": 25000.0,
+        "mean_episode_reward": 42.99230694,
+        "mean_safety_score": 47.76154816282028,
+        "mean_travel_time": 3752.8450807000004
+      },
+      {
+        "timesteps": 30000.0,
+        "mean_episode_reward": 41.0607077,
+        "mean_safety_score": 47.02606634629892,
+        "mean_travel_time": 3630.9113346199993
+      },
+      {
+        "timesteps": 35000.0,
+        "mean_episode_reward": 42.3007352,
+        "mean_safety_score": 46.80051808792099,
+        "mean_travel_time": 3420.9093185799998
+      },
+      {
+        "timesteps": 40000.0,
+        "mean_episode_reward": 41.71136797000001,
+        "mean_safety_score": 47.141377726443665,
+        "mean_travel_time": 3222.738474920001
+      },
+      {
+        "timesteps": 45000.0,
+        "mean_episode_reward": 38.372386139999996,
+        "mean_safety_score": 44.80315097250466,
+        "mean_travel_time": 3009.1567087
+      },
+      {
+        "timesteps": 50000.0,
+        "mean_episode_reward": 40.89511646,
+        "mean_safety_score": 44.037977187097525,
+        "mean_travel_time": 3050.6711534400006
+      },
+      {
+        "timesteps": 55000.0,
+        "mean_episode_reward": 47.15643529,
+        "mean_safety_score": 47.617102254167655,
+        "mean_travel_time": 3365.7640847000002
+      },
+      {
+        "timesteps": 60000.0,
+        "mean_episode_reward": 48.06057362000001,
+        "mean_safety_score": 46.04156807213192,
+        "mean_travel_time": 3422.9340838200005
+      },
+      {
+        "timesteps": 65000.0,
+        "mean_episode_reward": 53.421210040000005,
+        "mean_safety_score": 46.66790943815298,
+        "mean_travel_time": 3611.2843065600005
+      },
+      {
+        "timesteps": 70000.0,
+        "mean_episode_reward": 54.78322454999999,
+        "mean_safety_score": 47.15327244836823,
+        "mean_travel_time": 3785.287749920001
+      },
+      {
+        "timesteps": 75000.0,
+        "mean_episode_reward": 52.594504140000005,
+        "mean_safety_score": 45.129060855297155,
+        "mean_travel_time": 3514.41124986
+      },
+      {
+        "timesteps": 80000.0,
+        "mean_episode_reward": 55.9408573,
+        "mean_safety_score": 42.872287380494896,
+        "mean_travel_time": 3393.45202302
+      },
+      {
+        "timesteps": 85000.0,
+        "mean_episode_reward": 59.158058579999995,
+        "mean_safety_score": 44.312093259342646,
+        "mean_travel_time": 3787.6659134799993
+      },
+      {
+        "timesteps": 90000.0,
+        "mean_episode_reward": 58.03258457,
+        "mean_safety_score": 45.48824395329736,
+        "mean_travel_time": 3525.5630262399995
+      },
+      {
+        "timesteps": 95000.0,
+        "mean_episode_reward": 61.1682606,
+        "mean_safety_score": 45.910419041940905,
+        "mean_travel_time": 3690.87098496
+      },
+      {
+        "timesteps": 100000.0,
+        "mean_episode_reward": 58.04897768,
+        "mean_safety_score": 46.54761603910509,
+        "mean_travel_time": 3779.0301064999994
+      },
+      {
+        "timesteps": 105000.0,
+        "mean_episode_reward": 54.421305339999996,
+        "mean_safety_score": 45.92465659641431,
+        "mean_travel_time": 3845.2823028599996
+      }
+    ]
+  },
+  "Comfort Seeker": {
+    "algorithm": "ppo",
+    "agent_path": "/teamspace/studios/this_studio/bigcode/nightsafe/data/processed/agent_comfort_seeker.zip",
+    "fps": 823.9135000360624,
+    "mean_episode_reward": 32.41978758,
+    "mean_safety_score": 44.966221528693325,
+    "mean_travel_time": 3682.5454359600008,
+    "snapshots": [
+      {
+        "timesteps": 5000.0,
+        "mean_episode_reward": 9.558418904761904,
+        "mean_safety_score": 50.59604627967604,
+        "mean_travel_time": 4423.958337047619
+      },
+      {
+        "timesteps": 10000.0,
+        "mean_episode_reward": 9.961366499999999,
+        "mean_safety_score": 50.62901974217096,
+        "mean_travel_time": 4123.106761181818
+      },
+      {
+        "timesteps": 15000.0,
+        "mean_episode_reward": 13.078481147058822,
+        "mean_safety_score": 48.371197714668845,
+        "mean_travel_time": 3642.104441588235
+      },
+      {
+        "timesteps": 20000.0,
+        "mean_episode_reward": 14.57344097752809,
+        "mean_safety_score": 47.55734447561502,
+        "mean_travel_time": 3702.99723211236
+      },
+      {
+        "timesteps": 25000.0,
+        "mean_episode_reward": 18.478664520000002,
+        "mean_safety_score": 48.62622818169639,
+        "mean_travel_time": 3749.3313150600006
+      },
+      {
+        "timesteps": 30000.0,
+        "mean_episode_reward": 16.84373114,
+        "mean_safety_score": 46.873084462714836,
+        "mean_travel_time": 3628.81469164
+      },
+      {
+        "timesteps": 35000.0,
+        "mean_episode_reward": 17.384398030000003,
+        "mean_safety_score": 46.207135239598095,
+        "mean_travel_time": 3623.2271482799993
+      },
+      {
+        "timesteps": 40000.0,
+        "mean_episode_reward": 17.71754062,
+        "mean_safety_score": 48.00875763959335,
+        "mean_travel_time": 3643.7320132
+      },
+      {
+        "timesteps": 45000.0,
+        "mean_episode_reward": 17.316576409999996,
+        "mean_safety_score": 45.5904762641052,
+        "mean_travel_time": 3524.9822937799995
+      },
+      {
+        "timesteps": 50000.0,
+        "mean_episode_reward": 20.971473360000005,
+        "mean_safety_score": 46.484013769207266,
+        "mean_travel_time": 3480.6322611200007
+      },
+      {
+        "timesteps": 55000.0,
+        "mean_episode_reward": 25.987886959999997,
+        "mean_safety_score": 49.29639153365437,
+        "mean_travel_time": 3673.2217172
+      },
+      {
+        "timesteps": 60000.0,
+        "mean_episode_reward": 26.858784010000004,
+        "mean_safety_score": 48.998336329563045,
+        "mean_travel_time": 3682.60531074
+      },
+      {
+        "timesteps": 65000.0,
+        "mean_episode_reward": 30.86576399,
+        "mean_safety_score": 49.33642714696225,
+        "mean_travel_time": 3833.10689594
+      },
+      {
+        "timesteps": 70000.0,
+        "mean_episode_reward": 31.963065089999997,
+        "mean_safety_score": 48.443316668108565,
+        "mean_travel_time": 4355.64140592
+      },
+      {
+        "timesteps": 75000.0,
+        "mean_episode_reward": 33.032719220000004,
+        "mean_safety_score": 48.76003680468285,
+        "mean_travel_time": 4386.6514668
+      },
+      {
+        "timesteps": 80000.0,
+        "mean_episode_reward": 33.03877276,
+        "mean_safety_score": 46.69124381237798,
+        "mean_travel_time": 4053.2252278999995
+      },
+      {
+        "timesteps": 85000.0,
+        "mean_episode_reward": 35.451603070000004,
+        "mean_safety_score": 46.02349347234953,
+        "mean_travel_time": 4028.1099175599998
+      },
+      {
+        "timesteps": 90000.0,
+        "mean_episode_reward": 34.797999170000004,
+        "mean_safety_score": 46.6313088229796,
+        "mean_travel_time": 3830.4015311199996
+      },
+      {
+        "timesteps": 95000.0,
+        "mean_episode_reward": 35.3542793,
+        "mean_safety_score": 47.006838056821195,
+        "mean_travel_time": 3545.13304636
+      },
+      {
+        "timesteps": 100000.0,
+        "mean_episode_reward": 36.08798279,
+        "mean_safety_score": 45.752975968010794,
+        "mean_travel_time": 3632.3024008999996
+      },
+      {
+        "timesteps": 105000.0,
+        "mean_episode_reward": 35.2353386,
+        "mean_safety_score": 47.039159095097354,
+        "mean_travel_time": 3758.5686841
+      }
+    ]
+  },
+  "Efficiency First": {
+    "algorithm": "ppo",
+    "agent_path": "/teamspace/studios/this_studio/bigcode/nightsafe/data/processed/agent_efficiency_first.zip",
+    "fps": 830.8851649189768,
+    "mean_episode_reward": 2.7568874400000003,
+    "mean_safety_score": 39.922242680628386,
+    "mean_travel_time": 3673.11880006,
+    "snapshots": [
+      {
+        "timesteps": 5000.0,
+        "mean_episode_reward": -18.21555661904762,
+        "mean_safety_score": 50.59604627967604,
+        "mean_travel_time": 4423.958337047619
+      },
+      {
+        "timesteps": 10000.0,
+        "mean_episode_reward": -17.300984681818186,
+        "mean_safety_score": 50.488557336016534,
+        "mean_travel_time": 4197.094203181819
+      },
+      {
+        "timesteps": 15000.0,
+        "mean_episode_reward": -14.822815746268656,
+        "mean_safety_score": 48.818080023877755,
+        "mean_travel_time": 3788.2301705373134
+      },
+      {
+        "timesteps": 20000.0,
+        "mean_episode_reward": -14.622284738636365,
+        "mean_safety_score": 47.821453287993,
+        "mean_travel_time": 3933.092342704545
+      },
+      {
+        "timesteps": 25000.0,
+        "mean_episode_reward": -12.667397719999999,
+        "mean_safety_score": 49.28198903348296,
+        "mean_travel_time": 3962.51551576
+      },
+      {
+        "timesteps": 30000.0,
+        "mean_episode_reward": -10.696936309999998,
+        "mean_safety_score": 46.968991967068426,
+        "mean_travel_time": 3810.17835346
+      },
+      {
+        "timesteps": 35000.0,
+        "mean_episode_reward": -9.02162897,
+        "mean_safety_score": 46.235372451555406,
+        "mean_travel_time": 3888.90377086
+      },
+      {
+        "timesteps": 40000.0,
+        "mean_episode_reward": -6.646542289999998,
+        "mean_safety_score": 47.614258174956184,
+        "mean_travel_time": 3656.5879348400003
+      },
+      {
+        "timesteps": 45000.0,
+        "mean_episode_reward": -5.47894247,
+        "mean_safety_score": 45.220362169860266,
+        "mean_travel_time": 3429.5875371000006
+      },
+      {
+        "timesteps": 50000.0,
+        "mean_episode_reward": -4.5950757,
+        "mean_safety_score": 44.57394668823212,
+        "mean_travel_time": 3310.80779478
+      },
+      {
+        "timesteps": 55000.0,
+        "mean_episode_reward": -2.4451583,
+        "mean_safety_score": 47.16487074089348,
+        "mean_travel_time": 3251.5684294400007
+      },
+      {
+        "timesteps": 60000.0,
+        "mean_episode_reward": -2.50663575,
+        "mean_safety_score": 46.12818945714672,
+        "mean_travel_time": 3318.9865170600006
+      },
+      {
+        "timesteps": 65000.0,
+        "mean_episode_reward": -1.48926714,
+        "mean_safety_score": 46.43821423796395,
+        "mean_travel_time": 3414.95026364
+      },
+      {
+        "timesteps": 70000.0,
+        "mean_episode_reward": -0.9017166299999999,
+        "mean_safety_score": 48.20928126857305,
+        "mean_travel_time": 3804.51142874
+      },
+      {
+        "timesteps": 75000.0,
+        "mean_episode_reward": -0.3341502799999999,
+        "mean_safety_score": 49.15677783843789,
+        "mean_travel_time": 4065.4353904599993
+      },
+      {
+        "timesteps": 80000.0,
+        "mean_episode_reward": 0.1102745199999998,
+        "mean_safety_score": 49.45557752208589,
+        "mean_travel_time": 4327.42514806
+      },
+      {
+        "timesteps": 85000.0,
+        "mean_episode_reward": 1.85587658,
+        "mean_safety_score": 49.0567203416904,
+        "mean_travel_time": 4310.66649704
+      },
+      {
+        "timesteps": 90000.0,
+        "mean_episode_reward": 2.04421729,
+        "mean_safety_score": 48.22836505971763,
+        "mean_travel_time": 4155.27221574
+      },
+      {
+        "timesteps": 95000.0,
+        "mean_episode_reward": 3.6534125,
+        "mean_safety_score": 47.25029264452899,
+        "mean_travel_time": 3850.6920849600006
+      },
+      {
+        "timesteps": 100000.0,
+        "mean_episode_reward": 4.58507177,
+        "mean_safety_score": 45.59387236592015,
+        "mean_travel_time": 3842.8774665799997
+      },
+      {
+        "timesteps": 105000.0,
+        "mean_episode_reward": 3.0109124100000004,
+        "mean_safety_score": 41.213677300782976,
+        "mean_travel_time": 3722.45023556
+      }
+    ]
+  },
+  "Adaptive": {
+    "algorithm": "ppo",
+    "agent_path": "/teamspace/studios/this_studio/bigcode/nightsafe/data/processed/agent_adaptive.zip",
+    "fps": 833.1950114147452,
+    "mean_episode_reward": 36.955947019999996,
+    "mean_safety_score": 47.765294239420285,
+    "mean_travel_time": 4039.9777390799995,
+    "snapshots": [
+      {
+        "timesteps": 5000.0,
+        "mean_episode_reward": 9.558418904761904,
+        "mean_safety_score": 50.59604627967604,
+        "mean_travel_time": 4423.958337047619
+      },
+      {
+        "timesteps": 10000.0,
+        "mean_episode_reward": 10.522023954545453,
+        "mean_safety_score": 50.677252329563544,
+        "mean_travel_time": 4082.991395318181
+      },
+      {
+        "timesteps": 15000.0,
+        "mean_episode_reward": 13.962745588235293,
+        "mean_safety_score": 48.675438082277786,
+        "mean_travel_time": 3732.566196617647
+      },
+      {
+        "timesteps": 20000.0,
+        "mean_episode_reward": 16.331816629213485,
+        "mean_safety_score": 47.99120986400335,
+        "mean_travel_time": 3838.217467235955
+      },
+      {
+        "timesteps": 25000.0,
+        "mean_episode_reward": 20.2091213,
+        "mean_safety_score": 48.50235516419571,
+        "mean_travel_time": 3807.32665392
+      },
+      {
+        "timesteps": 30000.0,
+        "mean_episode_reward": 20.82545873,
+        "mean_safety_score": 47.22968005523505,
+        "mean_travel_time": 3580.7193473999996
+      },
+      {
+        "timesteps": 35000.0,
+        "mean_episode_reward": 20.47258682,
+        "mean_safety_score": 45.242573521104674,
+        "mean_travel_time": 3331.2276227600005
+      },
+      {
+        "timesteps": 40000.0,
+        "mean_episode_reward": 19.75981149,
+        "mean_safety_score": 44.3622799818484,
+        "mean_travel_time": 3100.39853992
+      },
+      {
+        "timesteps": 45000.0,
+        "mean_episode_reward": 19.79465302,
+        "mean_safety_score": 43.05195487649654,
+        "mean_travel_time": 3092.1719705799997
+      },
+      {
+        "timesteps": 50000.0,
+        "mean_episode_reward": 22.885758619999997,
+        "mean_safety_score": 42.92454315965669,
+        "mean_travel_time": 3166.7933734199996
+      },
+      {
+        "timesteps": 55000.0,
+        "mean_episode_reward": 27.395435330000005,
+        "mean_safety_score": 47.60584358955128,
+        "mean_travel_time": 3515.778379199999
+      },
+      {
+        "timesteps": 60000.0,
+        "mean_episode_reward": 28.22529581,
+        "mean_safety_score": 46.660958676331035,
+        "mean_travel_time": 3607.4981407599994
+      },
+      {
+        "timesteps": 65000.0,
+        "mean_episode_reward": 31.31165817,
+        "mean_safety_score": 48.567915859738775,
+        "mean_travel_time": 3995.7610349399997
+      },
+      {
+        "timesteps": 70000.0,
+        "mean_episode_reward": 32.022956830000005,
+        "mean_safety_score": 46.26350203515381,
+        "mean_travel_time": 3805.68960028
+      },
+      {
+        "timesteps": 75000.0,
+        "mean_episode_reward": 31.96356879,
+        "mean_safety_score": 43.34451919445939,
+        "mean_travel_time": 3663.87089104
+      },
+      {
+        "timesteps": 80000.0,
+        "mean_episode_reward": 33.29306544,
+        "mean_safety_score": 41.81313543830431,
+        "mean_travel_time": 3288.08904578
+      },
+      {
+        "timesteps": 85000.0,
+        "mean_episode_reward": 37.349227680000006,
+        "mean_safety_score": 42.079112499948906,
+        "mean_travel_time": 3532.67687608
+      },
+      {
+        "timesteps": 90000.0,
+        "mean_episode_reward": 38.47162489,
+        "mean_safety_score": 44.177338392174924,
+        "mean_travel_time": 3398.20022698
+      },
+      {
+        "timesteps": 95000.0,
+        "mean_episode_reward": 42.80820795,
+        "mean_safety_score": 46.43392989002402,
+        "mean_travel_time": 3802.9978270599995
+      },
+      {
+        "timesteps": 100000.0,
+        "mean_episode_reward": 40.98748373,
+        "mean_safety_score": 47.88726468845754,
+        "mean_travel_time": 4042.2882273599994
+      },
+      {
+        "timesteps": 105000.0,
+        "mean_episode_reward": 37.69414381,
+        "mean_safety_score": 48.3235096196702,
+        "mean_travel_time": 3948.46407974
+      }
+    ]
+  }
+}
