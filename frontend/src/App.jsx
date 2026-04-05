@@ -45,6 +45,69 @@ function routeToLatLngs(route) {
   return route.edges.flatMap((edge) => geometryToLatLngs(edge.geometry));
 }
 
+function RouteOverlay({ routeKey, route, active, onSegmentClick }) {
+  if (!route?.edges?.length) return null;
+
+  const routePositions = routeToLatLngs(route);
+  const routeColor = ROUTE_COLORS[routeKey];
+  const baseOpacity = active ? 0.98 : 0.28;
+  const baseWeight = active ? 8 : 5;
+
+  return (
+    <>
+      <Polyline
+        positions={routePositions}
+        pathOptions={{
+          color: "#020617",
+          weight: baseWeight + 6,
+          opacity: active ? 0.92 : 0.18,
+          lineCap: "round",
+          lineJoin: "round"
+        }}
+      />
+      <Polyline
+        positions={routePositions}
+        pathOptions={{
+          color: routeColor,
+          weight: baseWeight,
+          opacity: baseOpacity,
+          lineCap: "round",
+          lineJoin: "round"
+        }}
+      />
+      {route.edges.map((edge) => (
+        <Polyline
+          key={`${routeKey}-${edge.edge_id}`}
+          positions={geometryToLatLngs(edge.geometry)}
+          pathOptions={{
+            color: active ? scoreColor(edge.safety_score) : routeColor,
+            weight: active ? 6 : 4,
+            opacity: active ? 0.9 : 0.2,
+            lineCap: "round",
+            lineJoin: "round"
+          }}
+          eventHandlers={{
+            click: () =>
+              onSegmentClick({
+                edgeId: edge.edge_id,
+                score: edge.safety_score,
+                topFeatures: edge.top_features,
+                explanation: edge.explanation
+              })
+          }}
+        >
+          <LeafletTooltip sticky>
+            <div className="map-tooltip">
+              <strong>{edge.safety_score.toFixed(1)}</strong>
+              <div>{edge.explanation}</div>
+            </div>
+          </LeafletTooltip>
+        </Polyline>
+      ))}
+    </>
+  );
+}
+
 function buildBounds(routeResult, origin, destination) {
   const points = [
     ...routeToLatLngs(routeResult?.fastest),
@@ -146,6 +209,7 @@ export default function App() {
   const [error, setError] = useState("");
   const [showPareto, setShowPareto] = useState(true);
   const [serviceAreaBounds, setServiceAreaBounds] = useState(null);
+  const [activeRouteKey, setActiveRouteKey] = useState("fastest");
 
   useEffect(() => {
     async function loadHealth() {
@@ -205,6 +269,7 @@ export default function App() {
       setRouteResult(payload);
       setServiceAreaBounds(payload.service_area_bounds || serviceAreaBounds);
       setSelectedSegment(null);
+      setActiveRouteKey("fastest");
     } catch (routeError) {
       setRouteResult(null);
       setError(routeError.message);
@@ -303,10 +368,34 @@ export default function App() {
           ))}
         </div>
 
-        <RouteCard label="Fastest Route" route={routeResult?.fastest} color={ROUTE_COLORS.fastest} />
-        <RouteCard label="Balanced Route" route={routeResult?.balanced} color={ROUTE_COLORS.balanced} />
-        <RouteCard label="Safest Route" route={routeResult?.safest} color={ROUTE_COLORS.safest} />
-        <RouteCard label="Agent Route" route={routeResult?.agent_route} color={ROUTE_COLORS.agent_route} />
+        <button
+          type="button"
+          className={`route-card-btn ${activeRouteKey === "fastest" ? "route-card-btn--active" : ""}`}
+          onClick={() => setActiveRouteKey("fastest")}
+        >
+          <RouteCard label="Fastest Route" route={routeResult?.fastest} color={ROUTE_COLORS.fastest} />
+        </button>
+        <button
+          type="button"
+          className={`route-card-btn ${activeRouteKey === "balanced" ? "route-card-btn--active" : ""}`}
+          onClick={() => setActiveRouteKey("balanced")}
+        >
+          <RouteCard label="Balanced Route" route={routeResult?.balanced} color={ROUTE_COLORS.balanced} />
+        </button>
+        <button
+          type="button"
+          className={`route-card-btn ${activeRouteKey === "safest" ? "route-card-btn--active" : ""}`}
+          onClick={() => setActiveRouteKey("safest")}
+        >
+          <RouteCard label="Safest Route" route={routeResult?.safest} color={ROUTE_COLORS.safest} />
+        </button>
+        <button
+          type="button"
+          className={`route-card-btn ${activeRouteKey === "agent_route" ? "route-card-btn--active" : ""}`}
+          onClick={() => setActiveRouteKey("agent_route")}
+        >
+          <RouteCard label="Agent Route" route={routeResult?.agent_route} color={ROUTE_COLORS.agent_route} />
+        </button>
 
         <div className="marker-help">Left click sets destination after origin. Right click resets origin.</div>
       </aside>
@@ -326,33 +415,15 @@ export default function App() {
           {routeResult
             ? ["fastest", "balanced", "safest", "agent_route"].flatMap((routeKey) =>
                 visibleRoutes[routeKey]
-                  ? routeResult[routeKey].edges.map((edge) => (
-                      <Polyline
-                        key={`${routeKey}-${edge.edge_id}`}
-                        positions={geometryToLatLngs(edge.geometry)}
-                        pathOptions={{
-                          color: routeKey === "agent_route" ? ROUTE_COLORS.agent_route : scoreColor(edge.safety_score),
-                          weight: routeKey === "agent_route" ? 6 : 5,
-                          opacity: 0.9
-                        }}
-                        eventHandlers={{
-                          click: () =>
-                            setSelectedSegment({
-                              edgeId: edge.edge_id,
-                              score: edge.safety_score,
-                              topFeatures: edge.top_features,
-                              explanation: edge.explanation
-                            })
-                        }}
-                      >
-                        <LeafletTooltip sticky>
-                          <div className="map-tooltip">
-                            <strong>{edge.safety_score.toFixed(1)}</strong>
-                            <div>{edge.explanation}</div>
-                          </div>
-                        </LeafletTooltip>
-                      </Polyline>
-                    ))
+                  ? [
+                      <RouteOverlay
+                        key={routeKey}
+                        routeKey={routeKey}
+                        route={routeResult[routeKey]}
+                        active={activeRouteKey === routeKey}
+                        onSegmentClick={setSelectedSegment}
+                      />
+                    ]
                   : []
               )
             : null}
