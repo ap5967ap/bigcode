@@ -76,6 +76,7 @@ class NightSafeRouter:
             if graph_crs.to_epsg() == 4326
             else Transformer.from_crs(graph_crs, "EPSG:4326", always_xy=True)
         )
+        self.service_area_bounds = self._compute_service_area_bounds()
         self.max_travel_time = max(
             (float(data.get("travel_time", 1.0)) for _, _, _, data in self.graph.edges(keys=True, data=True)),
             default=1.0,
@@ -93,6 +94,28 @@ class NightSafeRouter:
             f"NightSafeRouter ready: nodes={self.graph.number_of_nodes()}, "
             f"edges={self.graph.number_of_edges()}, shap_entries={len(self.shap_explanations)}"
         )
+
+    def _compute_service_area_bounds(self) -> dict[str, float]:
+        xs = [float(node_data["x"]) for _, node_data in self.graph.nodes(data=True)]
+        ys = [float(node_data["y"]) for _, node_data in self.graph.nodes(data=True)]
+        min_x, max_x = min(xs), max(xs)
+        min_y, max_y = min(ys), max(ys)
+        min_lon, min_lat = (
+            (min_x, min_y)
+            if self.inverse_transformer is None
+            else self.inverse_transformer.transform(min_x, min_y)
+        )
+        max_lon, max_lat = (
+            (max_x, max_y)
+            if self.inverse_transformer is None
+            else self.inverse_transformer.transform(max_x, max_y)
+        )
+        return {
+            "min_lat": float(min_lat),
+            "min_lon": float(min_lon),
+            "max_lat": float(max_lat),
+            "max_lon": float(max_lon),
+        }
 
     def _load_agent(self, archetype_id: int) -> PPOPolicyRouteAgent | QLearningRouteAgent:
         agent_path = agent_path_for_archetype(archetype_id)
@@ -114,6 +137,16 @@ class NightSafeRouter:
             else self.coord_transformer.transform(lon, lat)
         )
         return int(ox.distance.nearest_nodes(self.graph, X=x_coord, Y=y_coord))
+
+    def _validate_coords_within_service_area(self, coords: list[float] | tuple[float, float], label: str) -> None:
+        lat, lon = float(coords[0]), float(coords[1])
+        bounds = self.service_area_bounds
+        if bounds["min_lat"] <= lat <= bounds["max_lat"] and bounds["min_lon"] <= lon <= bounds["max_lon"]:
+            return
+        raise ValueError(
+            f"{label} is outside the supported Bangalore service area "
+            f"({bounds['min_lat']:.4f}-{bounds['max_lat']:.4f} lat, {bounds['min_lon']:.4f}-{bounds['max_lon']:.4f} lon)."
+        )
 
     def _normalize_user_context(self, user_context: dict[str, Any]) -> dict[str, int]:
         travel_mode = user_context.get("travel_mode", 0)
@@ -327,6 +360,8 @@ class NightSafeRouter:
         return payload
 
     def route(self, origin_coords: list[float], destination_coords: list[float], user_context: dict[str, Any]) -> dict[str, Any]:
+        self._validate_coords_within_service_area(origin_coords, "Origin")
+        self._validate_coords_within_service_area(destination_coords, "Destination")
         origin_node = self._snap_to_node(origin_coords)
         destination_node = self._snap_to_node(destination_coords)
         normalized_context = self._normalize_user_context(user_context)
@@ -369,6 +404,7 @@ class NightSafeRouter:
             "agent_route": self._to_payload(agent_route),
             "pareto_frontier": pareto_frontier,
             "segment_explanations": segment_explanations,
+            "service_area_bounds": self.service_area_bounds,
         }
 
 

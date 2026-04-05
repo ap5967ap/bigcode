@@ -27,6 +27,7 @@ def test_router_returns_route_result_payload() -> None:
         "agent_route",
         "pareto_frontier",
         "segment_explanations",
+        "service_area_bounds",
     }
     assert len(result["fastest"]["edges"]) > 0
     assert len(result["pareto_frontier"]) == 5
@@ -35,3 +36,4 @@ def test_router_returns_route_result_payload() -> None:
     first_lon, first_lat = first_edge["geometry"]["coordinates"][0]
     assert -180.0 <= first_lon <= 180.0
     assert -90.0 <= first_lat <= 90.0
+    assert result["service_area_bounds"]["min_lat"] < result["service_area_bounds"]["max_lat"]

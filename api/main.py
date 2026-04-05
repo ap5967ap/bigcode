@@ -63,23 +63,27 @@ async def health() -> dict[str, Any]:
         "status": "ok",
         "graph_nodes": router.graph.number_of_nodes(),
         "graph_edges": router.graph.number_of_edges(),
+        "service_area_bounds": router.service_area_bounds,
     }
 
 
 @app.post("/route")
 async def route(request: RouteRequest) -> dict[str, Any]:
     router: NightSafeRouter = app.state.router
-    return router.route(
-        origin_coords=list(request.origin),
-        destination_coords=list(request.destination),
-        user_context={
-            "travel_mode": request.travel_mode,
-            "hour_of_day": request.hour_of_day,
-            "is_female": request.is_female,
-            "destination_type": request.destination_type,
-            "query_day_type": 0,
-        },
-    )
+    try:
+        return router.route(
+            origin_coords=list(request.origin),
+            destination_coords=list(request.destination),
+            user_context={
+                "travel_mode": request.travel_mode,
+                "hour_of_day": request.hour_of_day,
+                "is_female": request.is_female,
+                "destination_type": request.destination_type,
+                "query_day_type": 0,
+            },
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @app.get("/segment/{edge_id}/explain")

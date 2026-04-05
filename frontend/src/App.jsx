@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   LineChart,
   CartesianGrid,
@@ -10,7 +10,7 @@ import {
   XAxis,
   YAxis
 } from "recharts";
-import { MapContainer, Marker, Polyline, TileLayer, Tooltip as LeafletTooltip, useMapEvents } from "react-leaflet";
+import { MapContainer, Marker, Polyline, TileLayer, Tooltip as LeafletTooltip, useMap, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 
 const API_BASE = "http://127.0.0.1:8000";
@@ -38,6 +38,59 @@ function scoreColor(score) {
 function geometryToLatLngs(geometry) {
   if (!geometry?.coordinates) return [];
   return geometry.coordinates.map(([lon, lat]) => [lat, lon]);
+}
+
+function routeToLatLngs(route) {
+  if (!route?.edges) return [];
+  return route.edges.flatMap((edge) => geometryToLatLngs(edge.geometry));
+}
+
+function buildBounds(routeResult, origin, destination) {
+  const points = [
+    ...routeToLatLngs(routeResult?.fastest),
+    ...routeToLatLngs(routeResult?.balanced),
+    ...routeToLatLngs(routeResult?.safest),
+    ...routeToLatLngs(routeResult?.agent_route)
+  ];
+
+  if (!points.length) {
+    if (origin) points.push(origin);
+    if (destination) points.push(destination);
+  }
+
+  if (!points.length) return null;
+  return L.latLngBounds(points);
+}
+
+function ServiceAreaBox({ bounds }) {
+  if (!bounds) return null;
+  const rectangleBounds = [
+    [bounds.min_lat, bounds.min_lon],
+    [bounds.max_lat, bounds.max_lon]
+  ];
+  return (
+    <Polyline
+      positions={[
+        rectangleBounds[0],
+        [bounds.min_lat, bounds.max_lon],
+        rectangleBounds[1],
+        [bounds.max_lat, bounds.min_lon],
+        rectangleBounds[0]
+      ]}
+      pathOptions={{ color: "#38bdf8", weight: 1.5, opacity: 0.35, dashArray: "6 6" }}
+    />
+  );
+}
+
+function MapViewportController({ bounds }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!bounds || !bounds.isValid()) return;
+    map.fitBounds(bounds, { padding: [48, 48], maxZoom: 16 });
+  }, [bounds, map]);
+
+  return null;
 }
 
 function MapClickHandler({ setOrigin, setDestination }) {
@@ -92,8 +145,37 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showPareto, setShowPareto] = useState(true);
+  const [serviceAreaBounds, setServiceAreaBounds] = useState(null);
 
-  const mapCenter = useMemo(() => origin || [12.9716, 77.5946], [origin]);
+  useEffect(() => {
+    async function loadHealth() {
+      try {
+        const response = await fetch(`${API_BASE}/health`);
+        if (!response.ok) return;
+        const payload = await response.json();
+        setServiceAreaBounds(payload.service_area_bounds || null);
+      } catch {
+        // Leave bounds unset if the API is unavailable during boot.
+      }
+    }
+
+    loadHealth();
+  }, []);
+
+  const mapCenter = useMemo(() => {
+    if (serviceAreaBounds) {
+      return [
+        (serviceAreaBounds.min_lat + serviceAreaBounds.max_lat) / 2,
+        (serviceAreaBounds.min_lon + serviceAreaBounds.max_lon) / 2
+      ];
+    }
+    return origin || [12.9716, 77.5946];
+  }, [origin, serviceAreaBounds]);
+
+  const mapBounds = useMemo(
+    () => buildBounds(routeResult, origin, destination),
+    [routeResult, origin, destination]
+  );
 
   async function findRoute() {
     if (!origin || !destination) {
@@ -116,12 +198,15 @@ export default function App() {
         })
       });
       if (!response.ok) {
-        throw new Error(`API error ${response.status}`);
+        const payload = await response.json().catch(() => null);
+        throw new Error(payload?.detail || `API error ${response.status}`);
       }
       const payload = await response.json();
       setRouteResult(payload);
+      setServiceAreaBounds(payload.service_area_bounds || serviceAreaBounds);
       setSelectedSegment(null);
     } catch (routeError) {
+      setRouteResult(null);
       setError(routeError.message);
     } finally {
       setLoading(false);
@@ -196,6 +281,12 @@ export default function App() {
           {loading ? "Finding route..." : "Find Route"}
         </button>
         {error ? <div className="error-box">{error}</div> : null}
+        {serviceAreaBounds ? (
+          <div className="marker-help">
+            Service area: {serviceAreaBounds.min_lat.toFixed(3)}-{serviceAreaBounds.max_lat.toFixed(3)} lat,{" "}
+            {serviceAreaBounds.min_lon.toFixed(3)}-{serviceAreaBounds.max_lon.toFixed(3)} lon
+          </div>
+        ) : null}
 
         <div className="route-toggle-group">
           {Object.entries(visibleRoutes).map(([routeKey, visible]) => (
@@ -226,7 +317,9 @@ export default function App() {
             attribution='&copy; CARTO'
             url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
           />
+          <MapViewportController bounds={mapBounds} />
           <MapClickHandler setOrigin={setOrigin} setDestination={setDestination} />
+          <ServiceAreaBox bounds={serviceAreaBounds} />
           {origin ? <Marker position={origin} icon={markerIcon} /> : null}
           {destination ? <Marker position={destination} icon={markerIcon} /> : null}
 
