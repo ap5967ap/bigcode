@@ -132,7 +132,7 @@ nightsafe-routes/
 ### 1 — Clone and install Python dependencies
 
 ```bash
-git clone https://github.com/<your-username>/nightsafe-routes.git
+git clone https://github.com/ap5967ap/bigcode/
 cd nightsafe-routes
 
 python -m venv .venv
