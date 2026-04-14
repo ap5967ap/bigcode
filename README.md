@@ -311,10 +311,12 @@ python -m evaluation.eval
 
 | Route | Mean Safety | Mean ETA |
 |---|---|---|
-| Fastest | ~51 / 100 | baseline |
-| Balanced | ~54 / 100 | +~160% |
-| Safest | ~55 / 100 | +~160% |
-| Agent Route | ~65 / 100 | +~30% |
+| Fastest | 69.13 / 100 | 479 s (baseline) |
+| Balanced | 70.47 / 100 | 658 s |
+| Safest | 69.91 / 100 | 788 s |
+| Agent Route | 51.17 / 100 | 3466 s |
+
+Safest routing improved mean safety by **1.12%** over the fastest route with a **64.41%** ETA increase.
 
 ### Other Metrics
 
