@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   LineChart,
   CartesianGrid,
@@ -43,6 +43,26 @@ function geometryToLatLngs(geometry) {
 function routeToLatLngs(route) {
   if (!route?.edges) return [];
   return route.edges.flatMap((edge) => geometryToLatLngs(edge.geometry));
+}
+
+function formatDistance(distanceMeters) {
+  const distanceKm = Number(distanceMeters || 0) / 1000;
+  return `${distanceKm.toFixed(distanceKm >= 10 ? 1 : 2)} km`;
+}
+
+function buildRequestContext({ origin, destination, travelMode, hourOfDay, isFemale, destinationType }) {
+  return {
+    origin,
+    destination,
+    travelMode,
+    hourOfDay: Number(hourOfDay),
+    isFemale: Boolean(isFemale),
+    destinationType
+  };
+}
+
+function areContextsEqual(left, right) {
+  return JSON.stringify(left) === JSON.stringify(right);
 }
 
 function RouteOverlay({ routeKey, route, active, onSegmentClick }) {
@@ -182,6 +202,7 @@ function RouteCard({ label, route, color }) {
         {label}
       </div>
       <div className="route-card__metrics">
+        <span>{formatDistance(route.total_distance)}</span>
         <span>{(route.total_time / 60).toFixed(1)} min</span>
         <span>{route.mean_safety.toFixed(1)} safety</span>
       </div>
@@ -210,6 +231,8 @@ export default function App() {
   const [showPareto, setShowPareto] = useState(true);
   const [serviceAreaBounds, setServiceAreaBounds] = useState(null);
   const [activeRouteKey, setActiveRouteKey] = useState("fastest");
+  const [lastRequestedContext, setLastRequestedContext] = useState(null);
+  const autoRefreshTimerRef = useRef(null);
 
   useEffect(() => {
     async function loadHealth() {
@@ -240,6 +263,33 @@ export default function App() {
     () => buildBounds(routeResult, origin, destination),
     [routeResult, origin, destination]
   );
+  const currentRequestContext = useMemo(
+    () => buildRequestContext({ origin, destination, travelMode, hourOfDay, isFemale, destinationType }),
+    [origin, destination, travelMode, hourOfDay, isFemale, destinationType]
+  );
+  const routeIsStale = routeResult && lastRequestedContext && !areContextsEqual(currentRequestContext, lastRequestedContext);
+
+  useEffect(() => {
+    if (visibleRoutes[activeRouteKey]) return;
+    const nextVisibleRouteKey = Object.entries(visibleRoutes).find(([, visible]) => visible)?.[0];
+    if (nextVisibleRouteKey) {
+      setActiveRouteKey(nextVisibleRouteKey);
+    }
+  }, [activeRouteKey, visibleRoutes]);
+
+  useEffect(() => {
+    if (!routeResult || !routeIsStale || loading) return undefined;
+    autoRefreshTimerRef.current = window.setTimeout(() => {
+      findRoute();
+    }, 250);
+
+    return () => {
+      if (autoRefreshTimerRef.current) {
+        window.clearTimeout(autoRefreshTimerRef.current);
+        autoRefreshTimerRef.current = null;
+      }
+    };
+  }, [routeIsStale, routeResult, loading, currentRequestContext]);
 
   async function findRoute() {
     if (!origin || !destination) {
@@ -253,12 +303,12 @@ export default function App() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          origin,
-          destination,
-          travel_mode: travelMode,
-          hour_of_day: Number(hourOfDay),
-          is_female: isFemale,
-          destination_type: destinationType
+          origin: currentRequestContext.origin,
+          destination: currentRequestContext.destination,
+          travel_mode: currentRequestContext.travelMode,
+          hour_of_day: currentRequestContext.hourOfDay,
+          is_female: currentRequestContext.isFemale,
+          destination_type: currentRequestContext.destinationType
         })
       });
       if (!response.ok) {
@@ -267,6 +317,7 @@ export default function App() {
       }
       const payload = await response.json();
       setRouteResult(payload);
+      setLastRequestedContext(currentRequestContext);
       setServiceAreaBounds(payload.service_area_bounds || serviceAreaBounds);
       setSelectedSegment(null);
       setActiveRouteKey("fastest");
@@ -297,6 +348,12 @@ export default function App() {
       eta_minutes: routeResult.safest.total_time / 60,
       safety_score: routeResult.safest.mean_safety,
       fill: ROUTE_COLORS.safest
+    },
+    routeResult?.agent_route && {
+      name: "Agent",
+      eta_minutes: routeResult.agent_route.total_time / 60,
+      safety_score: routeResult.agent_route.mean_safety,
+      fill: ROUTE_COLORS.agent_route
     }
   ].filter(Boolean);
 
@@ -346,6 +403,21 @@ export default function App() {
           {loading ? "Finding route..." : "Find Route"}
         </button>
         {error ? <div className="error-box">{error}</div> : null}
+        {routeIsStale ? (
+          <div className="status-box status-box--warning">Settings changed. Click Find Route to recompute routes.</div>
+        ) : null}
+        <div className="context-summary">
+          <strong>Current settings</strong>
+          <span>
+            {travelMode} · {hourOfDay}:00 · {isFemale ? "female rider" : "not female"} · {destinationType}
+          </span>
+          {lastRequestedContext ? (
+            <span className={routeIsStale ? "context-summary__stale" : ""}>
+              Route shown for: {lastRequestedContext.travelMode} · {lastRequestedContext.hourOfDay}:00 ·{" "}
+              {lastRequestedContext.isFemale ? "female rider" : "not female"} · {lastRequestedContext.destinationType}
+            </span>
+          ) : null}
+        </div>
         {serviceAreaBounds ? (
           <div className="marker-help">
             Service area: {serviceAreaBounds.min_lat.toFixed(3)}-{serviceAreaBounds.max_lat.toFixed(3)} lat,{" "}
@@ -371,28 +443,40 @@ export default function App() {
         <button
           type="button"
           className={`route-card-btn ${activeRouteKey === "fastest" ? "route-card-btn--active" : ""}`}
-          onClick={() => setActiveRouteKey("fastest")}
+          onClick={() => {
+            setActiveRouteKey("fastest");
+            setVisibleRoutes((current) => ({ ...current, fastest: true }));
+          }}
         >
           <RouteCard label="Fastest Route" route={routeResult?.fastest} color={ROUTE_COLORS.fastest} />
         </button>
         <button
           type="button"
           className={`route-card-btn ${activeRouteKey === "balanced" ? "route-card-btn--active" : ""}`}
-          onClick={() => setActiveRouteKey("balanced")}
+          onClick={() => {
+            setActiveRouteKey("balanced");
+            setVisibleRoutes((current) => ({ ...current, balanced: true }));
+          }}
         >
           <RouteCard label="Balanced Route" route={routeResult?.balanced} color={ROUTE_COLORS.balanced} />
         </button>
         <button
           type="button"
           className={`route-card-btn ${activeRouteKey === "safest" ? "route-card-btn--active" : ""}`}
-          onClick={() => setActiveRouteKey("safest")}
+          onClick={() => {
+            setActiveRouteKey("safest");
+            setVisibleRoutes((current) => ({ ...current, safest: true }));
+          }}
         >
           <RouteCard label="Safest Route" route={routeResult?.safest} color={ROUTE_COLORS.safest} />
         </button>
         <button
           type="button"
           className={`route-card-btn ${activeRouteKey === "agent_route" ? "route-card-btn--active" : ""}`}
-          onClick={() => setActiveRouteKey("agent_route")}
+          onClick={() => {
+            setActiveRouteKey("agent_route");
+            setVisibleRoutes((current) => ({ ...current, agent_route: true }));
+          }}
         >
           <RouteCard label="Agent Route" route={routeResult?.agent_route} color={ROUTE_COLORS.agent_route} />
         </button>

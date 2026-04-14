@@ -111,6 +111,40 @@ select {
   color: #fecaca;
 }
 
+.status-box {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  font-size: 0.88rem;
+}
+
+.status-box--warning {
+  background: rgba(251, 191, 36, 0.14);
+  color: #fde68a;
+}
+
+.context-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  font-size: 0.84rem;
+  color: var(--text-muted);
+}
+
+.context-summary strong {
+  color: var(--text-main);
+}
+
+.context-summary__stale {
+  color: #fde68a;
+}
+
 .route-toggle-group {
   display: flex;
   flex-wrap: wrap;
